@@ -1,28 +1,27 @@
-import '../styles/globals.css'
-import type {AppProps} from 'next/app'
-import Web3ReactManager from "components/Web3ReactManager";
-import React from 'react';
-import {Web3ReactProvider} from '@web3-react/core';
-import {NETWORK_CHAIN_ID} from "constants/network";
-import {Web3Provider} from '@ethersproject/providers'
+import "../styles/globals.css";
+import type { AppProps } from "next/app";
+import React from "react";
+import {
+  Web3ConfigProvider,
+} from "@zoralabs/simple-wallet-provider";
 
-function getLibrary(provider: any): Web3Provider | undefined {
-  console.log(provider);
-  const library = new Web3Provider(provider)//, NETWORK_CHAIN_ID)
-  library.pollingInterval = 1000
-  return library
-}
+const CLIENT_INFO = {
+  name: "zuactioneer",
+  url: "http://zauctioneer.vercel.app/",
+  description: "zauctioneer",
+  icons: [],
+};
 
-
-
-function MyApp({Component, pageProps}: AppProps) {
+function MyApp({ Component, pageProps }: AppProps) {
   return (
-    <Web3ReactProvider getLibrary={getLibrary}>
-      <Web3ReactManager>
-        <Component {...pageProps} />
-      </Web3ReactManager>
-    </Web3ReactProvider>
-  )
+    <Web3ConfigProvider
+      rpcUrl={process.env.NEXT_PUBLIC_RPC_URL}
+      networkId={1}
+      clientInfo={CLIENT_INFO}
+    >
+      <Component {...pageProps} />
+    </Web3ConfigProvider>
+  );
 }
 
-export default MyApp
+export default MyApp;

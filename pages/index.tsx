@@ -8,8 +8,12 @@ import {
   PreviewComponents,
 } from "@zoralabs/nft-components";
 import { useWeb3React } from "@web3-react/core";
-import { injectedConnector } from "utils/connectors";
 import {
+  useWalletButton,
+  Web3ConfigProvider,
+} from "@zoralabs/simple-wallet-provider";
+import React, {
+  Fragment,
   SyntheticEvent,
   useCallback,
   useContext,
@@ -26,6 +30,17 @@ import { useContractTransaction } from "hooks/useContractTransaction";
 function eth(num: number) {
   return parseEther(num.toString());
 }
+
+const ConnectTrigger = () => {
+  const { buttonAction, actionText, connectedInfo } = useWalletButton();
+
+  return (
+    <Fragment>
+      {connectedInfo}
+      <button onClick={() => buttonAction()}>{actionText}</button>
+    </Fragment>
+  );
+};
 
 const CheckOwnerComponent = ({ wallet }: { wallet?: string | null }) => {
   const nftData = useContext(NFTDataContext);
@@ -44,7 +59,15 @@ const CheckOwnerComponent = ({ wallet }: { wallet?: string | null }) => {
   );
 };
 
+
+
 export default function Home() {
+  return (
+      <InnerHome />
+  );
+}
+
+function InnerHome() {
   const { account, active, activate, deactivate, library } = useWeb3React();
 
   const [error, setError] = useState<string | undefined>();
@@ -129,7 +152,7 @@ export default function Home() {
           const id = value.match(/\/([0-9]+)\/?$/);
           if (id && id[1]) {
             setZid(id[1]);
-            setMediaContractAddress(address?.media)
+            setMediaContractAddress(address?.media);
           }
         }
 
@@ -208,14 +231,15 @@ export default function Home() {
           </h1>
           <h3>
             step 0: connect metamask wallet
+            <ConnectTrigger />
             <div>
-              {active ? (
+              {/* {active ? (
                 <button onClick={() => deactivate()}>Disconnect Wallet</button>
               ) : (
                 <button onClick={() => activate(injectedConnector)}>
                   Connect Wallet
                 </button>
-              )}
+              )} */}
             </div>
             <div>
               Connected to:{" "}
