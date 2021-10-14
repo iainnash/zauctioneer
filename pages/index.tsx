@@ -149,10 +149,15 @@ function InnerHome() {
         setZoraTokenText(value);
 
         if (value.match(/zora\.co/)) {
-          const id = value.match(/\/([0-9]+)\/?$/);
-          if (id && id[1]) {
-            setZid(id[1]);
-            setMediaContractAddress(address?.media);
+          const uri = value.match(/zora.co\/collections\/([^\/]+)\/([^\/]+)/);
+          if (uri && uri[1] && uri[2]) {
+            console.log(uri)
+            if (uri[1] === 'zora') {
+              setMediaContractAddress(address?.media);
+            } else {
+              setMediaContractAddress(uri[1]);
+            }
+            setZid(uri[2]);
           }
         }
 
