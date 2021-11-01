@@ -72,7 +72,7 @@ function InnerHome() {
 
   const [error, setError] = useState<string | undefined>();
   const [zid, setZid] = useState("");
-  const [days, setDays] = useState(1);
+  const [hours, setHours] = useState(24);
   const [curatorFee, setCuratorFee] = useState(0);
   const [curator, setCurator] = useState("");
   const [amount, setAmount] = useState(1.0);
@@ -198,7 +198,7 @@ function InnerHome() {
         );
         await auctionHouse.createAuction(
           parseInt(zid),
-          Math.floor(days * 24 * 60 * 60),
+          Math.floor(hours * 60 * 60),
           eth(amount),
           curator || "0x0000000000000000000000000000000000000000",
           curatorFee || 0,
@@ -209,7 +209,7 @@ function InnerHome() {
         setError(err.message || "Unknown thing ggs ");
       }
     },
-    [active, library, network && network.chainId, zid, amount, curator, days]
+    [active, library, network && network.chainId, zid, amount, curator, hours]
   );
 
   return (
@@ -294,7 +294,7 @@ function InnerHome() {
             <hr />
 
             <form style={{ margin: "40px 0" }} onSubmit={setupAuction}>
-              <label
+              {/* <label
                 style={{
                   fontWeight: "bold",
                   textTransform: "uppercase",
@@ -307,8 +307,25 @@ function InnerHome() {
                 type="number"
                 step={1}
                 max={90}
-                value={days}
-                onChange={(e: any) => setDays(e.target.value)}
+                value={Math.floor(hours / 24)}
+                onChange={(e: any) => setHours(e.target.value*24)}
+              />
+              <br /> */}
+              <label
+                style={{
+                  fontWeight: "bold",
+                  textTransform: "uppercase",
+                  fontSize: 14,
+                }}
+              >
+                How many hours
+              </label>
+              <input
+                type="number"
+                step={1}
+                max={90*24}
+                value={hours}
+                onChange={(e: any) => setHours(e.target.value)}
               />
               <br />
               What is the ETH reserve price:
