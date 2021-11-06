@@ -59,12 +59,8 @@ const CheckOwnerComponent = ({ wallet }: { wallet?: string | null }) => {
   );
 };
 
-
-
 export default function Home() {
-  return (
-      <InnerHome />
-  );
+  return <InnerHome />;
 }
 
 function InnerHome() {
@@ -151,8 +147,8 @@ function InnerHome() {
         if (value.match(/zora\.co/)) {
           const uri = value.match(/zora.co\/collections\/([^\/]+)\/([^\/]+)/);
           if (uri && uri[1] && uri[2]) {
-            console.log(uri)
-            if (uri[1] === 'zora') {
+            console.log(uri);
+            if (uri[1] === "zora") {
               setMediaContractAddress(address?.media);
             } else {
               setMediaContractAddress(uri[1]);
@@ -189,19 +185,20 @@ function InnerHome() {
       try {
         setError(undefined);
         if (!active) {
-          throw new Error("no wallet brah");
+          throw new Error("no wallet connected");
         }
 
         const auctionHouse = new AuctionHouse(
           library.getSigner(),
           network.chainId as any
         );
+
         await auctionHouse.createAuction(
-          parseInt(zid),
+          zid,
           Math.floor(hours * 60 * 60),
           eth(amount),
           curator || "0x0000000000000000000000000000000000000000",
-          curatorFee || 0,
+          curatorFee,
           "0x0000000000000000000000000000000000000000",
           mediaContractAddress
         );
@@ -209,7 +206,7 @@ function InnerHome() {
         setError(err.message || "Unknown thing ggs ");
       }
     },
-    [active, library, network && network.chainId, zid, amount, curator, hours]
+    [active, library, network && network.chainId, zid, amount, curator, curatorFee, hours]
   );
 
   return (
@@ -323,7 +320,7 @@ function InnerHome() {
               <input
                 type="number"
                 step={1}
-                max={90*24}
+                max={90 * 24}
                 value={hours}
                 onChange={(e: any) => setHours(e.target.value)}
               />
@@ -353,7 +350,10 @@ function InnerHome() {
                     max={100}
                     min={0}
                     value={curatorFee}
-                    onChange={(e) => setCuratorFee(parseInt(e.target.value))}
+                    onChange={(e) => {
+                      const { value } = e.target;
+                      setCuratorFee(parseInt(value, 10));
+                    }}
                   />
                   <br />
                 </div>
