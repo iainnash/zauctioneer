@@ -45,6 +45,20 @@ const ConnectTrigger = () => {
 const CheckOwnerComponent = ({ wallet }: { wallet?: string | null }) => {
   const nftData = useContext(NFTDataContext);
   const owner = nftData.nft.data?.nft.owner;
+  if (nftData.nft.data?.pricing.reserve?.tokenOwner) {
+    if (nftData.nft.data.pricing.reserve.firstBidTime) {
+      return (
+        <div style={{ padding: 8, paddingLeft: 16, color: "green" }}>
+          This NFT is up for auction but the auction hasn't started yet
+        </div>
+      );
+    }
+    return (
+      <div style={{ padding: 8, paddingLeft: 16, color: "green" }}>
+        This auction is current and cannot be cancelled.
+      </div>
+    );
+  }
   if (owner?.toLowerCase() === wallet?.toLowerCase()) {
     return (
       <div style={{ padding: 8, paddingLeft: 16, color: "green" }}>
@@ -206,7 +220,16 @@ function InnerHome() {
         setError(err.message || "Unknown thing ggs ");
       }
     },
-    [active, library, network && network.chainId, zid, amount, curator, curatorFee, hours]
+    [
+      active,
+      library,
+      network && network.chainId,
+      zid,
+      amount,
+      curator,
+      curatorFee,
+      hours,
+    ]
   );
 
   return (

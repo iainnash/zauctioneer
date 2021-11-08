@@ -16,7 +16,7 @@ function MyApp({ Component, pageProps }: AppProps) {
   return (
     <Web3ConfigProvider
       rpcUrl={process.env.NEXT_PUBLIC_RPC_URL}
-      networkId={1}
+      networkId={parseInt(process.env.NEXT_PUBLIC_NETWORK_ID)}
       clientInfo={CLIENT_INFO}
     >
       <Component {...pageProps} />
