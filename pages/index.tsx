@@ -46,8 +46,10 @@ const ConnectTrigger = () => {
 const CheckOwnerComponent = ({ wallet }: { wallet?: string | null }) => {
   const nftData = useContext(NFTDataContext);
   const owner = nftData.data?.nft?.owner?.address;
-  const auction = nftData.data?.markets?.find((m) => m.type === MARKET_TYPES.AUCTION);
-  const indexerAuction = auction?.raw['ZoraIndexerV2'];
+  const auction = nftData.data?.markets?.find(
+    (m) => m.type === MARKET_TYPES.AUCTION
+  );
+  const indexerAuction = auction?.raw["ZoraIndexerV2"];
   if (false) {
     // if (nftData.nft.data.pricing.reserve.firstBidTime) {
     //   return (
@@ -289,10 +291,15 @@ function InnerHome() {
               <MediaConfiguration
                 networkId={(network.chainId || 1).toString() as any}
               >
-                <NFTPreview useBetaIndexer={true} id={zid} contract={mediaContractAddress}>
-                  <PreviewComponents.MediaThumbnail />
-                  <CheckOwnerComponent wallet={account} />
-                </NFTPreview>
+                {mediaContractAddress && (
+                  <NFTPreview
+                    id={zid}
+                    contract={mediaContractAddress}
+                  >
+                    <PreviewComponents.MediaThumbnail />
+                    <CheckOwnerComponent wallet={account} />
+                  </NFTPreview>
+                )}
               </MediaConfiguration>
             </div>
           )}
