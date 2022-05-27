@@ -26,6 +26,7 @@ import styles from "styles/Home.module.css";
 import { Zora, AuctionHouse, addresses } from "@zoralabs/zdk";
 import { useTokenApproval } from "hooks/useTokenApproval";
 import { useContractTransaction } from "hooks/useContractTransaction";
+import { MARKET_TYPES } from "@zoralabs/nft-hooks/dist/types";
 
 function eth(num: number) {
   return parseEther(num.toString());
@@ -44,8 +45,10 @@ const ConnectTrigger = () => {
 
 const CheckOwnerComponent = ({ wallet }: { wallet?: string | null }) => {
   const nftData = useContext(NFTDataContext);
-  const owner = nftData.nft.data?.nft.owner;
-  if (nftData.nft.data?.pricing.reserve?.tokenOwner) {
+  const owner = nftData.data?.nft?.owner?.address;
+  const auction = nftData.data?.markets?.find((m) => m.type === MARKET_TYPES.AUCTION);
+  const indexerAuction = auction?.raw['ZoraIndexerV2'];
+  if (false) {
     if (nftData.nft.data.pricing.reserve.firstBidTime) {
       return (
         <div style={{ padding: 8, paddingLeft: 16, color: "green" }}>
@@ -286,7 +289,7 @@ function InnerHome() {
               <MediaConfiguration
                 networkId={(network.chainId || 1).toString() as any}
               >
-                <NFTPreview id={zid} contract={mediaContractAddress}>
+                <NFTPreview useBetaIndexer={true} id={zid} contract={mediaContractAddress}>
                   <PreviewComponents.MediaThumbnail />
                   <CheckOwnerComponent wallet={account} />
                 </NFTPreview>
